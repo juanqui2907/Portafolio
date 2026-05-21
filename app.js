@@ -214,8 +214,32 @@ function triggerEasterEgg() {
   panel.hidden = false;
 
   // Hide click hint
-  document.querySelector(".click-hint")?.style.setProperty("display", "none");
+  const hint = document.querySelector(".click-hint");
+  if (hint) hint.style.display = "none";
 }
+
+function closeEasterEgg() {
+  easterActive = false;
+  autoRotateSpeed = 0.002;
+  // Revert colors
+  matLine.color.setHex(ACCENT);
+  lightMat.color.setHex(ACCENT);
+  centerRingMat.color.setHex(ACCENT);
+  centerRingMat.opacity = 0.12;
+
+  // Hide panel
+  const panel = document.getElementById("easter-egg");
+  panel.hidden = true;
+
+  // Show click hint again
+  const hint = document.querySelector(".click-hint");
+  if (hint) hint.style.display = "";
+}
+
+document.getElementById("ee-close")?.addEventListener("click", (e) => {
+  e.stopPropagation();
+  closeEasterEgg();
+});
 
 /* ---- RESIZE ---- */
 function resize() {
