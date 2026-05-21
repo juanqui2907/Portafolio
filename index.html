@@ -7,6 +7,19 @@
     <meta name="description" content="Portafolio personal de Juan Quintero, ingeniero electrónico y eléctrico de Barranquilla, Colombia. Sistemas de potencia, microgrids y herramientas web." />
     <meta name="theme-color" content="#0a0a0a" />
 
+    <!-- Open Graph / Social preview -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Juan Quintero — Ingeniero Electrónico y Eléctrico" />
+    <meta property="og:description" content="Portafolio personal: sistemas de potencia, microgrids y herramientas web. Barranquilla, Colombia." />
+    <meta property="og:image" content="og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Juan Quintero — Ingeniero Electrónico y Eléctrico" />
+    <meta name="twitter:description" content="Portafolio personal: sistemas de potencia, microgrids y herramientas web." />
+    <meta name="twitter:image" content="og-image.png" />
+
     <!-- Favicon: JQ monogram, inline SVG -->
     <link
       rel="icon"
@@ -78,10 +91,46 @@
             <span>// MICROGRIDS · POWER · WEB</span>
           </p>
 
-          <a class="scroll-cue mono" href="#about">
-            <span>SCROLL</span>
-            <span class="arrow">↓</span>
-          </a>
+          <div class="hero-actions">
+            <div class="cv-menu" id="cv-menu">
+              <button class="cv-trigger mono" id="cv-trigger" aria-haspopup="true" aria-expanded="false">
+                <span class="cv-trigger-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 3v12"></path>
+                    <path d="M7 10l5 5 5-5"></path>
+                    <path d="M5 21h14"></path>
+                  </svg>
+                </span>
+                <span>Descargar CV</span>
+                <span class="cv-trigger-caret" aria-hidden="true">▾</span>
+              </button>
+              <ul class="cv-options" role="menu" id="cv-options">
+                <li role="none">
+                  <a role="menuitem" href="cv/cv-electronica.pdf" download>
+                    <span class="cv-opt-label">Electrónica</span>
+                    <span class="cv-opt-hint mono">.PDF</span>
+                  </a>
+                </li>
+                <li role="none">
+                  <a role="menuitem" href="cv/cv-electrica.pdf" download>
+                    <span class="cv-opt-label">Eléctrica</span>
+                    <span class="cv-opt-hint mono">.PDF</span>
+                  </a>
+                </li>
+                <li role="none">
+                  <a role="menuitem" href="cv/cv-completo.pdf" download>
+                    <span class="cv-opt-label">Electrónica + Eléctrica</span>
+                    <span class="cv-opt-hint mono">.PDF</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <a class="scroll-cue mono" href="#about">
+              <span>SCROLL</span>
+              <span class="arrow">↓</span>
+            </a>
+          </div>
         </div>
 
         <div class="hero-stage">
@@ -293,8 +342,8 @@
       </header>
 
       <div class="contact-wrap">
-        <h2 class="contact-title">
-          ¿Algo<br /><span class="outline">que construir?</span>
+        <h2 class="contact-title outline">
+          ¿Algo<br />que construir?
         </h2>
 
         <div class="social-row">

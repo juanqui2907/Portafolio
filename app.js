@@ -6,6 +6,34 @@
 import * as THREE from "three";
 
 /* =========================
+   CV DROPDOWN
+   ========================= */
+const cvMenu = document.getElementById("cv-menu");
+const cvTrigger = document.getElementById("cv-trigger");
+
+cvTrigger?.addEventListener("click", (e) => {
+  e.stopPropagation();
+  const open = cvMenu.classList.toggle("open");
+  cvTrigger.setAttribute("aria-expanded", open ? "true" : "false");
+});
+
+// Close when clicking outside
+document.addEventListener("click", (e) => {
+  if (!cvMenu?.contains(e.target)) {
+    cvMenu?.classList.remove("open");
+    cvTrigger?.setAttribute("aria-expanded", "false");
+  }
+});
+
+// Close on Escape
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    cvMenu?.classList.remove("open");
+    cvTrigger?.setAttribute("aria-expanded", "false");
+  }
+});
+
+/* =========================
    CLOCK (HUD)
    ========================= */
 const clockEl = document.getElementById("clock");

@@ -269,6 +269,107 @@ button {
   animation: slideUp 0.9s cubic-bezier(0.2, 0.9, 0.3, 1) 0.55s backwards;
 }
 
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  animation: slideUp 0.9s cubic-bezier(0.2, 0.9, 0.3, 1) 0.7s backwards;
+}
+
+.cv-menu {
+  position: relative;
+}
+
+.cv-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  background: var(--accent);
+  color: var(--bg);
+  border: 1px solid var(--accent);
+  padding: 0.85rem 1.2rem;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  transition: background 0.25s, color 0.25s;
+}
+
+.cv-trigger:hover {
+  background: var(--bg);
+  color: var(--accent);
+}
+
+.cv-trigger-icon svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+.cv-trigger-caret {
+  font-size: 10px;
+  transition: transform 0.3s;
+}
+
+.cv-menu.open .cv-trigger-caret {
+  transform: rotate(180deg);
+}
+
+.cv-options {
+  list-style: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--accent);
+  padding: 0;
+  margin: 0;
+  z-index: 10;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity 0.25s, transform 0.25s, visibility 0.25s;
+  white-space: nowrap;
+}
+
+.cv-menu.open .cv-options {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.cv-options li + li {
+  border-top: 1px solid var(--rule);
+}
+
+.cv-options a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 0.75rem 1rem;
+  color: var(--ink);
+  transition: background 0.2s, color 0.2s;
+}
+
+.cv-options a:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.cv-opt-label {
+  font-size: 0.95rem;
+}
+
+.cv-opt-hint {
+  color: var(--ink-dim);
+  font-size: 10px;
+}
+
+.cv-options a:hover .cv-opt-hint {
+  color: var(--bg);
+}
+
 .scroll-cue {
   display: inline-flex;
   align-items: center;
@@ -277,7 +378,6 @@ button {
   border: 1px solid var(--rule);
   padding: 0.7rem 1.1rem;
   transition: all 0.3s;
-  animation: slideUp 0.9s cubic-bezier(0.2, 0.9, 0.3, 1) 0.7s backwards;
 }
 
 .scroll-cue:hover {

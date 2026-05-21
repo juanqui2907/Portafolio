@@ -7,10 +7,24 @@ Portafolio personal. HTML + CSS + JS puro, Three.js vía CDN. **Cero build, cero
 ```
 portfolio/
 ├── index.html     # Estructura completa
-├── styles.css     # Diseño (paleta ámbar/negro, tipografías Syne + JetBrains Mono + Manrope)
-├── app.js         # Three.js (carro Hot Wheels) + osciloscopio trifásico + skills + reloj
+├── styles.css     # Diseño
+├── app.js         # Three.js + osciloscopio + interacciones
+├── og-image.png   # Preview para WhatsApp/LinkedIn/X (1200×630)
+├── cv/            # Tus PDFs (electrónica, eléctrica, completo)
 └── README.md
 ```
+
+## Tus CVs
+
+Coloca 3 archivos PDF dentro de la carpeta `cv/`:
+
+```
+cv/cv-electronica.pdf
+cv/cv-electrica.pdf
+cv/cv-completo.pdf
+```
+
+Si quieres cambiar los nombres, edítalos en `index.html` buscando `cv-menu`.
 
 ## Probar en local
 
