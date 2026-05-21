@@ -761,13 +761,9 @@ button {
 .contact-title {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: clamp(3rem, 10vw, 7rem);
+  font-size: clamp(3rem, 11vw, 8rem);
   line-height: 0.95;
   letter-spacing: -0.04em;
-}
-
-.contact-title span {
-  color: var(--accent);
 }
 
 .social-row {
