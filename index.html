@@ -3,61 +3,320 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <title>Juan Quintero — Ingeniero Electrónico y Eléctrico</title>
-    <meta
-      name="description"
-      content="Portafolio personal de Juan Quintero, ingeniero electrónico y eléctrico de Barranquilla, Colombia. Proyectos web y de ingeniería: sistemas de potencia, microgrids y herramientas PWA."
+    <meta name="description" content="Portafolio personal de Juan Quintero, ingeniero electrónico y eléctrico de Barranquilla, Colombia. Sistemas de potencia, microgrids y herramientas web." />
+    <meta name="theme-color" content="#0a0a0a" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@300;400;500;600&display=swap"
     />
-    <meta name="robots" content="index, follow" />
+    <link rel="stylesheet" href="styles.css" />
 
-    <meta property="og:title" content="Juan Quintero — Ingeniero Electrónico y Eléctrico" />
-    <meta
-      property="og:description"
-      content="Portafolio personal de Juan Quintero, ingeniero electrónico y eléctrico de Barranquilla, Colombia."
-    />
-    <meta property="og:type" content="website" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Juan Quintero — Ingeniero Electrónico y Eléctrico" />
-    <meta
-      name="twitter:description"
-      content="Portafolio personal de Juan Quintero, ingeniero electrónico y eléctrico de Barranquilla, Colombia."
-    />
-
-    <link rel="preload" href="/fonts/urbanist-400.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
-    <link rel="preload" href="/fonts/urbanist-700.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
-    <link rel="preload" href="/fonts/urbanist-900.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
-    <link rel="preload" href="/fonts/pro-font-windows-400.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
-    <link rel="preload" href="/fonts/pro-font-windows-700.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
-
-    <link rel="icon" type="image/png" href="/meta/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/meta/favicon.svg" />
-    <link rel="shortcut icon" href="/meta/favicon.ico" />
-
-    <meta name="theme-color" content="#dfd1bc" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+        }
+      }
+    </script>
   </head>
-  <body class="is-loading">
-    <svg style="display: none" viewBox="0 0 56 61" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <path
-          id="logo-path"
-          d="M3 14 24 2C28 0 28 0 32 2L53 14C56 16 56 17 56 19L56 43C56 46 55 47 51 49L32 59C28 61 28 61 24 59L5 49C1 47 0 46 0 43L0 19C0 17 0 16 3 14M28 4 5 17 28 28 51 17 28 4M53 20 30 31 30 56 53 44 53 20M40 42 33 35C33 35 32 34 33 33 34 32 35 33 36 34L36 34 43 41C44 42 44 42 43 43L35 51C35 51 34 52 33 51 32 50 33 49 33 49L40 42M16 42 23 35C23 35 24 34 23 33 22 32 21 33 20 34L13 41C12 42 12 42 13 43L21 51C21 51 22 52 23 51 24 50 23 49 23 49L16 42"
-        ></path>
-      </defs>
-    </svg>
-    <div id="app"></div>
-    <div class="preloader">
-      <svg class="preloader-svg" viewBox="0 0 56 61" xmlns="http://www.w3.org/2000/svg">
-        <mask id="preloader-mask">
-          <rect fill="black" height="61" width="61"></rect>
-          <rect fill="white" height="61" width="61" class="preloader-rect" style="transform: scaleY(0)"></rect>
-        </mask>
 
-        <use href="#logo-path" class="preloader-path" opacity="0.3"></use>
-        <use href="#logo-path" class="preloader-path" mask="url(#preloader-mask)"></use>
-      </svg>
-    </div>
-    <script type="module" src="./src/main.ts"></script>
+  <body>
+    <!-- Background grid -->
+    <div class="grid-bg" aria-hidden="true"></div>
+    <div class="noise" aria-hidden="true"></div>
+
+    <!-- Top status bar (HUD) -->
+    <header class="topbar">
+      <a href="#top" class="monogram" aria-label="Inicio">
+        <span class="monogram-mark">JQ</span>
+        <span class="monogram-status">
+          <span class="dot"></span>
+          <span class="mono">SYS_ONLINE</span>
+        </span>
+      </a>
+
+      <nav class="nav" aria-label="Navegación principal">
+        <a href="#about" data-label="01">Sobre mí</a>
+        <a href="#skills" data-label="02">Habilidades</a>
+        <a href="#scope" data-label="03">Lab</a>
+        <a href="#projects" data-label="04">Proyectos</a>
+        <a href="#contact" data-label="05">Contacto</a>
+      </nav>
+
+      <div class="coords mono" aria-hidden="true">
+        <span id="clock">--:--:--</span>
+        <span class="sep">•</span>
+        <span>11.00°N 74.81°W</span>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <section id="top" class="hero">
+      <div class="hero-grid">
+        <div class="hero-text">
+          <p class="mono dim eyebrow">
+            <span class="ticker">/</span> JUAN_FELIPE_QUINTERO_CABALLERO.SYS
+          </p>
+          <h1 class="display">
+            <span class="line">Juan</span>
+            <span class="line outline">Quintero</span>
+          </h1>
+          <p class="role">
+            Ingeniero electrónico<br />
+            <span class="accent">y eléctrico</span>
+          </p>
+          <p class="hero-meta mono dim">
+            <span>// BARRANQUILLA, COLOMBIA</span><br />
+            <span>// UNIVERSIDAD DEL NORTE</span><br />
+            <span>// MICROGRIDS · POWER · WEB</span>
+          </p>
+
+          <a class="scroll-cue mono" href="#about">
+            <span>SCROLL</span>
+            <span class="arrow">↓</span>
+          </a>
+        </div>
+
+        <div class="hero-stage">
+          <div class="stage-frame">
+            <div class="stage-corner tl"></div>
+            <div class="stage-corner tr"></div>
+            <div class="stage-corner bl"></div>
+            <div class="stage-corner br"></div>
+
+            <canvas id="hero-canvas"></canvas>
+
+            <div class="stage-hud mono">
+              <span class="hud-tag">MODEL: HW-75</span>
+              <span class="hud-tag">RPM: <span id="rpm">0150</span></span>
+              <span class="hud-tag click-hint">[click] start engine</span>
+            </div>
+
+            <div class="stage-easter" id="easter-egg" hidden>
+              <p class="mono accent">// HOT WHEELS DETECTED</p>
+              <p class="ee-count"><strong>75</strong> carros indexados</p>
+              <a class="ee-link mono" href="https://juanqui2907.github.io" target="_blank" rel="noopener">
+                ABRIR COLECCIÓN →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="section about">
+      <header class="section-head">
+        <span class="mono dim section-num">01 / SOBRE MÍ</span>
+        <h2 class="section-title">Curiosidad como método.</h2>
+      </header>
+
+      <div class="about-grid">
+        <div class="about-body">
+          <p>
+            Soy una persona que <strong>no se queda quieta</strong> y a la que le gusta
+            descubrir cómo funcionan las cosas. Estudio ingeniería electrónica y
+            eléctrica en la Universidad del Norte, con foco en estabilidad dinámica
+            de microgrids fotovoltaicos.
+          </p>
+          <p>
+            Cuando no estoy en MATLAB o resolviendo mallas de puesta a tierra,
+            construyo herramientas web propias — apps que uso a diario, hechas con
+            HTML, JS y un poquito de obstinación.
+          </p>
+        </div>
+
+        <aside class="specs mono">
+          <div class="spec-row"><span class="dim">LOC</span><span>Barranquilla, CO</span></div>
+          <div class="spec-row"><span class="dim">EDU</span><span>Uninorte</span></div>
+          <div class="spec-row"><span class="dim">FOCUS</span><span>Microgrids / Power</span></div>
+          <div class="spec-row"><span class="dim">STDS</span><span>IEEE 80, IEEE 998</span></div>
+          <div class="spec-row"><span class="dim">STACK</span><span>MATLAB · Python · JS</span></div>
+          <div class="spec-row"><span class="dim">STATUS</span><span class="accent">AVAILABLE</span></div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="section skills">
+      <header class="section-head">
+        <span class="mono dim section-num">02 / HABILIDADES</span>
+        <h2 class="section-title">Subsistemas activos.</h2>
+        <p class="section-sub">Click en cada módulo para detalle.</p>
+      </header>
+
+      <ul class="skill-list" role="list">
+        <li class="skill" data-skill="matlab">
+          <button class="skill-head" aria-expanded="false">
+            <span class="skill-idx mono">01</span>
+            <span class="skill-name">MATLAB &amp; Simulink</span>
+            <span class="skill-bar"><span class="skill-fill" style="--lvl: 85%"></span></span>
+            <span class="skill-toggle mono">+</span>
+          </button>
+          <div class="skill-body">
+            <p>Modelado de máquinas síncronas (DL 1026A), control de inversores GFM/GFL y simulación de microgrids aislados.</p>
+            <span class="mono dim">USED_IN: tesis · emulador 6 kVA</span>
+          </div>
+        </li>
+
+        <li class="skill" data-skill="power">
+          <button class="skill-head" aria-expanded="false">
+            <span class="skill-idx mono">02</span>
+            <span class="skill-name">Power Systems</span>
+            <span class="skill-bar"><span class="skill-fill" style="--lvl: 80%"></span></span>
+            <span class="skill-toggle mono">+</span>
+          </button>
+          <div class="skill-body">
+            <p>Estabilidad dinámica en redes aisladas, generación fotovoltaica, diseño de mallas de puesta a tierra y apantallamiento atmosférico.</p>
+            <span class="mono dim">USED_IN: TerraShield · Minciencias</span>
+          </div>
+        </li>
+
+        <li class="skill" data-skill="python">
+          <button class="skill-head" aria-expanded="false">
+            <span class="skill-idx mono">03</span>
+            <span class="skill-name">Python &amp; Flask</span>
+            <span class="skill-bar"><span class="skill-fill" style="--lvl: 75%"></span></span>
+            <span class="skill-toggle mono">+</span>
+          </button>
+          <div class="skill-body">
+            <p>Apps web para ingeniería: cálculo, visualización geoespacial (GeoJSON), generación de reportes y despliegue en Render.</p>
+            <span class="mono dim">USED_IN: TerraShield</span>
+          </div>
+        </li>
+
+        <li class="skill" data-skill="standards">
+          <button class="skill-head" aria-expanded="false">
+            <span class="skill-idx mono">04</span>
+            <span class="skill-name">IEEE 80 / 998</span>
+            <span class="skill-bar"><span class="skill-fill" style="--lvl: 70%"></span></span>
+            <span class="skill-toggle mono">+</span>
+          </button>
+          <div class="skill-body">
+            <p>Diseño bajo IEEE Std 80-2013 (puesta a tierra) e IEEE Std 998 (apantallamiento), también IEC 62305 para protección contra rayos.</p>
+            <span class="mono dim">USED_IN: TerraShield</span>
+          </div>
+        </li>
+
+        <li class="skill" data-skill="microgrids">
+          <button class="skill-head" aria-expanded="false">
+            <span class="skill-idx mono">05</span>
+            <span class="skill-name">Microgrids</span>
+            <span class="skill-bar"><span class="skill-fill" style="--lvl: 65%"></span></span>
+            <span class="skill-toggle mono">+</span>
+          </button>
+          <div class="skill-body">
+            <p>Redes aisladas con generación distribuida, control GFM/GFL en inversores, caso de estudio: comunidad indígena en la Sierra Nevada.</p>
+            <span class="mono dim">USED_IN: propuesta Minciencias</span>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- SCOPE / Engineering visualization -->
+    <section id="scope" class="section scope">
+      <header class="section-head">
+        <span class="mono dim section-num">03 / LAB</span>
+        <h2 class="section-title">Señal viva.</h2>
+        <p class="section-sub">Sistema trifásico balanceado · 60 Hz · monitor en tiempo real.</p>
+      </header>
+
+      <div class="scope-panel">
+        <div class="scope-meta mono">
+          <div><span class="dim">FREQ</span> 60.00 Hz</div>
+          <div><span class="dim">V_RMS</span> 120.0 V</div>
+          <div><span class="dim">PHASE</span> A · B · C</div>
+          <div><span class="dim">THD</span> 0.0%</div>
+        </div>
+        <canvas id="scope-canvas"></canvas>
+        <div class="scope-legend mono">
+          <span><i class="dot a"></i> FASE_A</span>
+          <span><i class="dot b"></i> FASE_B</span>
+          <span><i class="dot c"></i> FASE_C</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="section projects">
+      <header class="section-head">
+        <span class="mono dim section-num">04 / PROYECTOS</span>
+        <h2 class="section-title">Sistemas desplegados.</h2>
+      </header>
+
+      <div class="proj-grid">
+        <a class="proj" href="https://juanqui2907.github.io" target="_blank" rel="noopener">
+          <span class="proj-idx mono">P_01</span>
+          <h3 class="proj-title">Hot Wheels Collection</h3>
+          <p class="proj-desc">Galería interactiva de mi colección personal: 75+ carros a escala con visor ampliado y navegación entre fotos.</p>
+          <ul class="proj-tags mono"><li>HTML</li><li>CSS</li><li>JS</li></ul>
+          <span class="proj-go mono">VER EN VIVO ↗</span>
+        </a>
+
+        <a class="proj" href="https://juanqui2907.github.io/OrdIA/" target="_blank" rel="noopener">
+          <span class="proj-idx mono">P_02</span>
+          <h3 class="proj-title">OrdIA</h3>
+          <p class="proj-desc">PWA de organización personal: temporizadores, hábitos con rachas, calendario, lista de tareas y Pomodoro configurable.</p>
+          <ul class="proj-tags mono"><li>PWA</li><li>localStorage</li><li>JS</li></ul>
+          <span class="proj-go mono">VER EN VIVO ↗</span>
+        </a>
+
+        <a class="proj" href="https://juanqui2907.github.io/FinFlow/" target="_blank" rel="noopener">
+          <span class="proj-idx mono">P_03</span>
+          <h3 class="proj-title">FinFlow</h3>
+          <p class="proj-desc">PWA mobile-first de finanzas personales: transacciones, metas, proyecciones, contador de denominaciones COP y export a PDF.</p>
+          <ul class="proj-tags mono"><li>PWA</li><li>localStorage</li><li>JS</li></ul>
+          <span class="proj-go mono">VER EN VIVO ↗</span>
+        </a>
+
+        <a class="proj" href="https://juanqui2907.github.io/Suenan/" target="_blank" rel="noopener">
+          <span class="proj-idx mono">P_04</span>
+          <h3 class="proj-title">Palabras que Suenan</h3>
+          <p class="proj-desc">App de cartas deslizables: frases reflexivas, chistes y piropos en español, con gestos táctiles.</p>
+          <ul class="proj-tags mono"><li>HTML</li><li>JS</li><li>CSS</li></ul>
+          <span class="proj-go mono">VER EN VIVO ↗</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section contact">
+      <header class="section-head">
+        <span class="mono dim section-num">05 / CONTACTO</span>
+        <h2 class="section-title contact-title">
+          ¿Algo<br /><span class="outline">que construir?</span>
+        </h2>
+      </header>
+
+      <div class="contact-grid">
+        <a class="contact-card" href="mailto:jfqc123@gmail.com">
+          <span class="mono dim">EMAIL</span>
+          <strong>jfqc123@gmail.com</strong>
+        </a>
+        <a class="contact-card" href="https://github.com/juanqui2907" target="_blank" rel="noopener">
+          <span class="mono dim">GITHUB</span>
+          <strong>juanqui2907</strong>
+        </a>
+        <a class="contact-card" href="https://www.linkedin.com/in/juan-felipe-quintero-caballero-a79a21337/" target="_blank" rel="noopener">
+          <span class="mono dim">LINKEDIN</span>
+          <strong>Juan Felipe Quintero</strong>
+        </a>
+        <a class="contact-card" href="https://x.com/Juan80341326" target="_blank" rel="noopener">
+          <span class="mono dim">X</span>
+          <strong>@Juan80341326</strong>
+        </a>
+      </div>
+    </section>
+
+    <footer class="footer mono">
+      <span>© <span id="year">2026</span> JUAN QUINTERO</span>
+      <span class="dim">BUILT IN BARRANQUILLA · v1.0.0</span>
+    </footer>
+
+    <script type="module" src="app.js"></script>
   </body>
 </html>
