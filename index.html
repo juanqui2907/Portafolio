@@ -190,10 +190,9 @@
         <aside class="specs mono">
           <div class="spec-row"><span class="dim">LOC</span><span>Barranquilla, CO</span></div>
           <div class="spec-row"><span class="dim">EDU</span><span>Uninorte</span></div>
-          <div class="spec-row"><span class="dim">FOCUS</span><span>Microgrids / Power</span></div>
-          <div class="spec-row"><span class="dim">STDS</span><span>IEEE 80, IEEE 998</span></div>
-          <div class="spec-row"><span class="dim">STACK</span><span>MATLAB · Python · JS</span></div>
-          <div class="spec-row"><span class="dim">STATUS</span><span class="accent">AVAILABLE</span></div>
+          <div class="spec-row"><span class="dim">FOCUS</span><span>Power Systems</span></div>
+          <div class="spec-row"><span class="dim">TOOLS</span><span>PowerFactory · MATLAB</span></div>
+          <div class="spec-row"><span class="dim">STACK</span><span>Python · JS · AWS</span></div>
         </aside>
       </div>
     </section>
@@ -207,70 +206,72 @@
       </header>
 
       <ul class="skill-list" role="list">
-        <li class="skill" data-skill="matlab">
+
+        <li class="skill">
           <button class="skill-head" aria-expanded="false">
             <span class="skill-idx mono">01</span>
-            <span class="skill-name">MATLAB &amp; Simulink</span>
+            <span class="skill-name">DIgSILENT PowerFactory</span>
+            <span class="skill-bar"><span class="skill-fill" style="--lvl: 90%"></span></span>
+            <span class="skill-toggle mono">+</span>
+          </button>
+          <div class="skill-body">
+            <p>Modelado y análisis de sistemas eléctricos de potencia, estudios de flujo de carga, cortocircuito, integración de generación renovable y coordinación de protecciones.</p>
+            <span class="mono dim">USED_IN: Perales · EACP Termoflores</span>
+          </div>
+        </li>
+
+        <li class="skill">
+          <button class="skill-head" aria-expanded="false">
+            <span class="skill-idx mono">02</span>
+            <span class="skill-name">Power Systems</span>
             <span class="skill-bar"><span class="skill-fill" style="--lvl: 85%"></span></span>
             <span class="skill-toggle mono">+</span>
           </button>
           <div class="skill-body">
-            <p>Modelado de máquinas síncronas (DL 1026A), control de inversores GFM/GFL y simulación de microgrids aislados.</p>
-            <span class="mono dim">USED_IN: tesis · emulador 6 kVA</span>
+            <p>Protecciones eléctricas, coordinación de aislamiento, sistemas fotovoltaicos, puesta a tierra y protección contra descargas atmosféricas.</p>
+            <span class="mono dim">USED_IN: Subestaciones AT · Líneas de transmisión</span>
           </div>
         </li>
 
-        <li class="skill" data-skill="power">
+        <li class="skill">
           <button class="skill-head" aria-expanded="false">
-            <span class="skill-idx mono">02</span>
-            <span class="skill-name">Power Systems</span>
+            <span class="skill-idx mono">03</span>
+            <span class="skill-name">Python & Web Development</span>
             <span class="skill-bar"><span class="skill-fill" style="--lvl: 80%"></span></span>
             <span class="skill-toggle mono">+</span>
           </button>
           <div class="skill-body">
-            <p>Estabilidad dinámica en redes aisladas, generación fotovoltaica, diseño de mallas de puesta a tierra y apantallamiento atmosférico.</p>
-            <span class="mono dim">USED_IN: TerraShield · Minciencias</span>
+            <p>Desarrollo de aplicaciones web, automatización de cálculos de ingeniería, visualización de datos y despliegue de servicios en la nube.</p>
+            <span class="mono dim">USED_IN: PowerFlow · Herramientas propias</span>
           </div>
         </li>
 
-        <li class="skill" data-skill="python">
+        <li class="skill">
           <button class="skill-head" aria-expanded="false">
-            <span class="skill-idx mono">03</span>
-            <span class="skill-name">Python &amp; Flask</span>
+            <span class="skill-idx mono">04</span>
+            <span class="skill-name">MATLAB & Simulink</span>
             <span class="skill-bar"><span class="skill-fill" style="--lvl: 75%"></span></span>
             <span class="skill-toggle mono">+</span>
           </button>
           <div class="skill-body">
-            <p>Apps web para ingeniería: cálculo, visualización geoespacial (GeoJSON), generación de reportes y despliegue en Render.</p>
-            <span class="mono dim">USED_IN: TerraShield</span>
+            <p>Modelado matemático, simulación de sistemas dinámicos, análisis de señales y desarrollo de algoritmos para aplicaciones de ingeniería.</p>
+            <span class="mono dim">USED_IN: Proyectos académicos</span>
           </div>
         </li>
 
-        <li class="skill" data-skill="standards">
+        <li class="skill">
           <button class="skill-head" aria-expanded="false">
-            <span class="skill-idx mono">04</span>
-            <span class="skill-name">IEEE 80 / 998</span>
+            <span class="skill-idx mono">05</span>
+            <span class="skill-name">IEEE & IEC Standards</span>
             <span class="skill-bar"><span class="skill-fill" style="--lvl: 70%"></span></span>
             <span class="skill-toggle mono">+</span>
           </button>
           <div class="skill-body">
-            <p>Diseño bajo IEEE Std 80-2013 (puesta a tierra) e IEEE Std 998 (apantallamiento), también IEC 62305 para protección contra rayos.</p>
-            <span class="mono dim">USED_IN: TerraShield</span>
+            <p>Aplicación de IEEE 80, IEEE 998 e IEC 62305 para diseño de sistemas de puesta a tierra y protección contra rayos.</p>
+            <span class="mono dim">USED_IN: TerraShield · Subestaciones</span>
           </div>
         </li>
 
-        <li class="skill" data-skill="microgrids">
-          <button class="skill-head" aria-expanded="false">
-            <span class="skill-idx mono">05</span>
-            <span class="skill-name">Microgrids</span>
-            <span class="skill-bar"><span class="skill-fill" style="--lvl: 65%"></span></span>
-            <span class="skill-toggle mono">+</span>
-          </button>
-          <div class="skill-body">
-            <p>Redes aisladas con generación distribuida, control GFM/GFL en inversores, caso de estudio: comunidad indígena en la Sierra Nevada.</p>
-            <span class="mono dim">USED_IN: propuesta Minciencias</span>
-          </div>
-        </li>
       </ul>
     </section>
 
