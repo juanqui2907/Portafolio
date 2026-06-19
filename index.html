@@ -280,20 +280,40 @@
       <header class="section-head">
         <span class="mono dim section-num">03 / LAB</span>
         <h2 class="section-title">Señal viva.</h2>
-        <p class="section-sub">Sistema trifásico balanceado · 60 Hz · monitor en tiempo real.</p>
+        <p class="section-sub">Sistema trifásico balanceado · monitor en tiempo real · controles interactivos.</p>
       </header>
 
       <div class="scope-panel">
         <div class="scope-meta mono">
-          <div><span class="dim">FREQ</span> 60.00 Hz</div>
-          <div><span class="dim">V_RMS</span> 120.0 V</div>
+          <div><span class="dim">FREQ</span> <span id="meta-freq">60.00</span> Hz</div>
+          <div><span class="dim">V_RMS</span> <span id="meta-vrms">120.0</span> V</div>
           <div><span class="dim">PHASE</span> A · B · C</div>
         </div>
         <canvas id="scope-canvas"></canvas>
+
+        <div class="scope-controls mono">
+          <div class="ctrl-row">
+            <label class="ctrl-label"><span class="dim">FREQ</span></label>
+            <input type="range" id="ctrl-freq" min="1" max="120" step="1" value="60" class="scope-slider" />
+            <span class="ctrl-val" id="val-freq">60 Hz</span>
+          </div>
+          <div class="ctrl-row">
+            <label class="ctrl-label"><span class="dim">AMP</span></label>
+            <input type="range" id="ctrl-amp" min="10" max="100" step="1" value="80" class="scope-slider" />
+            <span class="ctrl-val" id="val-amp">120 V</span>
+          </div>
+          <div class="ctrl-row">
+            <label class="ctrl-label"><span class="dim">SPEED</span></label>
+            <input type="range" id="ctrl-speed" min="0" max="10" step="1" value="5" class="scope-slider" />
+            <span class="ctrl-val" id="val-speed">1.0×</span>
+          </div>
+        </div>
+
         <div class="scope-legend mono">
-          <span><i class="dot a"></i> FASE_A</span>
-          <span><i class="dot b"></i> FASE_B</span>
-          <span><i class="dot c"></i> FASE_C</span>
+          <button class="phase-toggle active" data-phase="0" title="Toggle Fase A"><i class="dot a"></i> FASE_A</button>
+          <button class="phase-toggle active" data-phase="1" title="Toggle Fase B"><i class="dot b"></i> FASE_B</button>
+          <button class="phase-toggle active" data-phase="2" title="Toggle Fase C"><i class="dot c"></i> FASE_C</button>
+          <button class="scope-btn" id="btn-pause">⏸ PAUSE</button>
         </div>
       </div>
     </section>
@@ -305,6 +325,7 @@
         <h2 class="section-title">Sistemas desplegados.</h2>
       </header>
 
+      <div class="proj-category mono dim">PERSONAL</div>
       <div class="proj-grid">
         <a class="proj" href="https://juanqui2907.github.io" target="_blank" rel="noopener">
           <span class="proj-idx mono">P_01</span>
@@ -335,6 +356,25 @@
           <h3 class="proj-title">Palabras que Suenan</h3>
           <p class="proj-desc">App de cartas deslizables: frases reflexivas, chistes y piropos en español, con gestos táctiles.</p>
           <ul class="proj-tags mono"><li>HTML</li><li>JS</li><li>CSS</li></ul>
+          <span class="proj-go mono">VER EN VIVO ↗</span>
+        </a>
+      </div>
+
+      <div class="proj-category mono dim" style="margin-top:1px;">ACADÉMICO</div>
+      <div class="proj-grid">
+        <a class="proj" href="https://terrashield.onrender.com" target="_blank" rel="noopener">
+          <span class="proj-idx mono">A_01</span>
+          <h3 class="proj-title">TerraShield</h3>
+          <p class="proj-desc">Herramienta web para diseño de sistemas de puesta a tierra (IEEE 80) y protección contra rayos (IEEE 998 / IEC 62305) con datos de suelo IGAC para el Caribe colombiano.</p>
+          <ul class="proj-tags mono"><li>Flask</li><li>Python</li><li>Three.js</li><li>SQLite</li></ul>
+          <span class="proj-go mono">VER EN VIVO ↗</span>
+        </a>
+
+        <a class="proj" href="https://sites.google.com/view/powerflow-electronics/inicio" target="_blank" rel="noopener">
+          <span class="proj-idx mono">A_02</span>
+          <h3 class="proj-title">PowerFlow Electronics</h3>
+          <p class="proj-desc">Sitio académico de electrónica de potencia: recursos, análisis de convertidores y material de apoyo para cursos de la Universidad del Norte.</p>
+          <ul class="proj-tags mono"><li>Google Sites</li><li>Académico</li></ul>
           <span class="proj-go mono">VER EN VIVO ↗</span>
         </a>
       </div>

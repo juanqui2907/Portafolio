@@ -743,12 +743,72 @@ button {
   border: 1px solid var(--ink-faint);
 }
 
+/* controls */
+.scope-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--rule);
+  background: rgba(255,184,77,0.02);
+}
+
+.ctrl-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ctrl-label {
+  width: 3.5rem;
+  font-size: 0.7rem;
+  color: var(--ink-dim);
+  flex-shrink: 0;
+}
+
+.scope-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 3px;
+  background: rgba(255,184,77,0.2);
+  outline: none;
+  cursor: pointer;
+}
+
+.scope-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  background: #ffb84d;
+  border: none;
+  cursor: pointer;
+}
+
+.scope-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: #ffb84d;
+  border: none;
+  cursor: pointer;
+}
+
+.ctrl-val {
+  width: 4.5rem;
+  text-align: right;
+  font-size: 0.7rem;
+  color: #ffb84d;
+  flex-shrink: 0;
+}
+
 .scope-legend {
   display: flex;
-  gap: 1.4rem;
+  gap: 1rem;
   margin-top: 1rem;
   color: var(--ink-dim);
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .scope-legend .dot {
@@ -766,7 +826,60 @@ button {
 .scope-legend .dot.b { background: #7fb3d5; }
 .scope-legend .dot.c { background: #d97757; }
 
+.phase-toggle {
+  background: none;
+  border: 1px solid transparent;
+  color: var(--ink-dim);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.72rem;
+  padding: 3px 6px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  transition: border-color 0.15s, opacity 0.15s;
+}
+
+.phase-toggle.active {
+  border-color: var(--rule);
+  color: var(--ink);
+}
+
+.phase-toggle:not(.active) {
+  opacity: 0.35;
+}
+
+.phase-toggle:not(.active) .dot {
+  opacity: 0.3;
+}
+
+.scope-btn {
+  background: none;
+  border: 1px solid var(--rule);
+  color: var(--ink-dim);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  margin-left: auto;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.scope-btn:hover {
+  color: #ffb84d;
+  border-color: #ffb84d;
+}
+
 /* ---------- projects ---------- */
+
+.proj-category {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  padding: 0.35rem 0.75rem;
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  border-bottom: none;
+}
 
 .proj-grid {
   display: grid;

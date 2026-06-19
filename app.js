@@ -344,10 +344,66 @@ const io = new IntersectionObserver(
 document.querySelectorAll(".skill").forEach((s) => io.observe(s));
 
 /* =========================
-   SCOPE — 3-phase 60 Hz sine wave
+   SCOPE — interactive 3-phase sine wave
    ========================= */
 const scopeCanvas = document.getElementById("scope-canvas");
 const sctx = scopeCanvas.getContext("2d");
+
+// state
+let scopePaused = false;
+let scopeTimeOffset = 0;
+let lastRafTime = 0;
+const phaseVisible = [true, true, true];
+
+// controls
+const ctrlFreq  = document.getElementById("ctrl-freq");
+const ctrlAmp   = document.getElementById("ctrl-amp");
+const ctrlSpeed = document.getElementById("ctrl-speed");
+const valFreq   = document.getElementById("val-freq");
+const valAmp    = document.getElementById("val-amp");
+const valSpeed  = document.getElementById("val-speed");
+const metaFreq  = document.getElementById("meta-freq");
+const metaVrms  = document.getElementById("meta-vrms");
+const btnPause  = document.getElementById("btn-pause");
+
+function getScopeParams() {
+  const freq  = parseInt(ctrlFreq.value,  10);
+  const amp   = parseInt(ctrlAmp.value,   10) / 100;   // 0.1–1.0 normalised
+  const speed = parseInt(ctrlSpeed.value, 10);          // 0–10
+  return { freq, amp, speed };
+}
+
+ctrlFreq.addEventListener("input", () => {
+  const f = ctrlFreq.value;
+  valFreq.textContent  = `${f} Hz`;
+  metaFreq.textContent = `${parseFloat(f).toFixed(2)}`;
+});
+
+ctrlAmp.addEventListener("input", () => {
+  const a = ctrlAmp.value;
+  const vrms = Math.round(a * 150);
+  valAmp.textContent   = `${vrms} V`;
+  metaVrms.textContent = `${vrms}.0`;
+});
+
+ctrlSpeed.addEventListener("input", () => {
+  const s = parseInt(ctrlSpeed.value, 10);
+  const label = s === 0 ? "0× (stop)" : `${(s / 5).toFixed(1)}×`;
+  valSpeed.textContent = label;
+});
+
+document.querySelectorAll(".phase-toggle").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const idx = parseInt(btn.dataset.phase, 10);
+    phaseVisible[idx] = !phaseVisible[idx];
+    btn.classList.toggle("active", phaseVisible[idx]);
+  });
+});
+
+btnPause.addEventListener("click", () => {
+  scopePaused = !scopePaused;
+  btnPause.textContent = scopePaused ? "▶ PLAY" : "⏸ PAUSE";
+});
 
 function resizeScope() {
   const dpr = window.devicePixelRatio || 1;
@@ -361,7 +417,8 @@ window.addEventListener("resize", resizeScope);
 
 const COLORS_PHASE = ["#ffb84d", "#7fb3d5", "#d97757"];
 
-function drawScope(time) {
+function drawScope(elapsed) {
+  const { freq, amp, speed } = getScopeParams();
   const rect = scopeCanvas.getBoundingClientRect();
   const w = rect.width;
   const h = rect.height;
@@ -374,42 +431,41 @@ function drawScope(time) {
   const rows = 6;
   for (let i = 0; i <= cols; i++) {
     const x = (i / cols) * w;
-    sctx.beginPath();
-    sctx.moveTo(x, 0);
-    sctx.lineTo(x, h);
-    sctx.stroke();
+    sctx.beginPath(); sctx.moveTo(x, 0); sctx.lineTo(x, h); sctx.stroke();
   }
   for (let j = 0; j <= rows; j++) {
     const y = (j / rows) * h;
-    sctx.beginPath();
-    sctx.moveTo(0, y);
-    sctx.lineTo(w, y);
-    sctx.stroke();
+    sctx.beginPath(); sctx.moveTo(0, y); sctx.lineTo(w, y); sctx.stroke();
   }
 
-  // axis center
+  // axis
   sctx.strokeStyle = "rgba(232, 230, 225, 0.15)";
-  sctx.beginPath();
-  sctx.moveTo(0, h / 2);
-  sctx.lineTo(w, h / 2);
-  sctx.stroke();
+  sctx.beginPath(); sctx.moveTo(0, h / 2); sctx.lineTo(w, h / 2); sctx.stroke();
 
-  // sine waves — 3 phases offset by 120°
-  const amp = h * 0.36;
-  const cycles = 3;
+  // freq annotation
+  sctx.fillStyle = "rgba(255,184,77,0.25)";
+  sctx.font = "10px 'JetBrains Mono', monospace";
+  sctx.fillText(`${freq} Hz`, 8, h - 8);
+
+  const drawAmp   = h * 0.42 * amp;
+  const cycles    = 3;
+  const speedMult = speed / 5;             // 0×–2×
   const phaseShifts = [0, (2 * Math.PI) / 3, (4 * Math.PI) / 3];
 
   phaseShifts.forEach((shift, i) => {
+    if (!phaseVisible[i]) return;
     sctx.strokeStyle = COLORS_PHASE[i];
     sctx.lineWidth = 1.8;
     sctx.shadowColor = COLORS_PHASE[i];
     sctx.shadowBlur = 8;
     sctx.beginPath();
-    const points = 300;
+    const points = 400;
     for (let p = 0; p <= points; p++) {
       const x = (p / points) * w;
-      const t = (p / points) * cycles * Math.PI * 2;
-      const y = h / 2 - Math.sin(t + shift - time * 0.003) * amp;
+      // map freq: higher freq → more cycles visible
+      const freqScale = freq / 60;
+      const t = (p / points) * cycles * freqScale * Math.PI * 2;
+      const y = h / 2 - Math.sin(t + shift - elapsed * 0.003 * speedMult) * drawAmp;
       if (p === 0) sctx.moveTo(x, y);
       else sctx.lineTo(x, y);
     }
@@ -417,21 +473,22 @@ function drawScope(time) {
     sctx.shadowBlur = 0;
   });
 
-  // sweep cursor (right edge "now" indicator)
+  // sweep cursor
   const cursorX = w - 1;
   sctx.strokeStyle = "rgba(255, 184, 77, 0.4)";
   sctx.lineWidth = 1;
-  sctx.beginPath();
-  sctx.moveTo(cursorX, 0);
-  sctx.lineTo(cursorX, h);
-  sctx.stroke();
+  sctx.beginPath(); sctx.moveTo(cursorX, 0); sctx.lineTo(cursorX, h); sctx.stroke();
 }
 
 function scopeLoop(t) {
-  drawScope(t);
   requestAnimationFrame(scopeLoop);
+  if (!scopePaused) {
+    scopeTimeOffset += t - lastRafTime;
+  }
+  lastRafTime = t;
+  drawScope(scopeTimeOffset);
 }
-requestAnimationFrame(scopeLoop);
+requestAnimationFrame((t) => { lastRafTime = t; requestAnimationFrame(scopeLoop); });
 
 /* =========================
    KONAMI EASTER EGG (extra) — type "race" to trigger
