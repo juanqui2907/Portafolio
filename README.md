@@ -5,7 +5,7 @@ Portafolio personal en **HTML + CSS + JavaScript puro**, con Three.js vía CDN. 
 ## Qué cambió en la V2
 
 - **TerraShield como Featured Project** con una visual técnica propia.
-- **Previews visuales** para Hot Wheels Collection, OrdIA, FinFlow, Palabras que Suenan y PowerFlow Electronics.
+- **Previews visuales** para Hot Wheels Collection, Rutina, FinFlow, Palabras que Suenan y PowerFlow Electronics.
 - Efectos inspirados en Rare UI adaptados a vanilla JS/CSS:
   - spotlight reactivo al cursor;
   - elevación/reveal en previews;
