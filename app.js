@@ -346,28 +346,56 @@ document.querySelectorAll(".skill").forEach((s) => io.observe(s));
 
 
 /* =========================
-   NAV — active section highlight
+   NAV — active section highlight / scrollspy
    ========================= */
 const navLinks = [...document.querySelectorAll('.nav a[href^="#"]')];
-const sectionMap = new Map(navLinks.map((link) => [link.getAttribute('href').slice(1), link]));
-const sectionObserver = new IntersectionObserver(
-  (entries) => {
-    const visible = entries
-      .filter((entry) => entry.isIntersecting)
-      .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-    if (!visible.length) return;
-    const id = visible[0].target.id;
-    navLinks.forEach((link) => link.classList.toggle('active', link === sectionMap.get(id)));
-  },
-  {
-    rootMargin: '-32% 0px -52% 0px',
-    threshold: [0.2, 0.35, 0.55]
+const navSections = navLinks
+  .map((link) => document.querySelector(link.getAttribute('href')))
+  .filter(Boolean);
+
+function setActiveNav(id) {
+  navLinks.forEach((link) => {
+    const active = link.getAttribute('href') === `#${id}`;
+    link.classList.toggle('active', active);
+    if (active) link.setAttribute('aria-current', 'location');
+    else link.removeAttribute('aria-current');
+  });
+}
+
+let navTicking = false;
+function updateActiveNav() {
+  const marker = Math.max(110, window.innerHeight * 0.34);
+  let activeSection = navSections[0];
+
+  for (const section of navSections) {
+    const rect = section.getBoundingClientRect();
+    if (rect.top <= marker) activeSection = section;
+    if (rect.top > marker) break;
   }
-);
-['about','skills','scope','projects','contact'].forEach((id) => {
-  const section = document.getElementById(id);
-  if (section) sectionObserver.observe(section);
+
+  if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8) {
+    activeSection = navSections[navSections.length - 1];
+  }
+
+  if (activeSection) setActiveNav(activeSection.id);
+  navTicking = false;
+}
+
+window.addEventListener('scroll', () => {
+  if (navTicking) return;
+  navTicking = true;
+  requestAnimationFrame(updateActiveNav);
+}, { passive: true });
+window.addEventListener('resize', updateActiveNav);
+
+navLinks.forEach((link) => {
+  link.addEventListener('click', () => {
+    const id = link.getAttribute('href').slice(1);
+    setActiveNav(id);
+  });
 });
+
+updateActiveNav();
 
 
 /* =========================
