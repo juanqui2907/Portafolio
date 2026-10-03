@@ -344,6 +344,32 @@ const io = new IntersectionObserver(
 );
 document.querySelectorAll(".skill").forEach((s) => io.observe(s));
 
+
+/* =========================
+   NAV — active section highlight
+   ========================= */
+const navLinks = [...document.querySelectorAll('.nav a[href^="#"]')];
+const sectionMap = new Map(navLinks.map((link) => [link.getAttribute('href').slice(1), link]));
+const sectionObserver = new IntersectionObserver(
+  (entries) => {
+    const visible = entries
+      .filter((entry) => entry.isIntersecting)
+      .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+    if (!visible.length) return;
+    const id = visible[0].target.id;
+    navLinks.forEach((link) => link.classList.toggle('active', link === sectionMap.get(id)));
+  },
+  {
+    rootMargin: '-32% 0px -52% 0px',
+    threshold: [0.2, 0.35, 0.55]
+  }
+);
+['about','skills','scope','projects','contact'].forEach((id) => {
+  const section = document.getElementById(id);
+  if (section) sectionObserver.observe(section);
+});
+
+
 /* =========================
    VERCEL ANALYTICS — event helper
    Custom events appear when the plan supports them.
