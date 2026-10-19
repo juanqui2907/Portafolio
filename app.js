@@ -34,6 +34,19 @@ document.addEventListener("keydown", (e) => {
 });
 
 /* =========================
+   PERFORMANCE — helpers
+   ========================= */
+const IS_LOW_POWER = window.matchMedia("(hover: none), (max-width: 820px)").matches;
+
+// Ejecuta `onChange(visible)` cuando el elemento entra/sale de pantalla.
+function watchVisibility(el, onChange) {
+  if (!el || !("IntersectionObserver" in window)) { onChange(true); return; }
+  new IntersectionObserver((entries) => {
+    entries.forEach((e) => onChange(e.isIntersecting));
+  }, { rootMargin: "100px" }).observe(el);
+}
+
+/* =========================
    CLOCK (HUD)
    ========================= */
 const clockEl = document.getElementById("clock");
@@ -61,9 +74,10 @@ camera.lookAt(0, 0.8, 0);
 const renderer = new THREE.WebGLRenderer({
   canvas,
   alpha: true,
-  antialias: true,
+  antialias: !IS_LOW_POWER,
+  powerPreference: "low-power",
 });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, IS_LOW_POWER ? 1.5 : 2));
 
 // COLORS
 const ACCENT = 0xffb84d;
@@ -286,8 +300,12 @@ resize();
 const rpmEl = document.getElementById("rpm");
 let rpmShown = 150;
 
+let heroVisible = true;
+let heroRaf = 0;
+
 function loop(t) {
-  requestAnimationFrame(loop);
+  if (!heroVisible || document.hidden) { heroRaf = 0; return; }
+  heroRaf = requestAnimationFrame(loop);
 
   // Auto-rotate the car group on Y
   car.rotation.y += autoRotateSpeed;
@@ -316,7 +334,12 @@ function loop(t) {
 
   renderer.render(scene, camera);
 }
-requestAnimationFrame(loop);
+
+function startHero() {
+  if (!heroRaf && heroVisible && !document.hidden) heroRaf = requestAnimationFrame(loop);
+}
+watchVisibility(canvas, (v) => { heroVisible = v; startHero(); });
+startHero();
 
 /* =========================
    SKILLS — accordion
@@ -423,13 +446,22 @@ document.querySelectorAll("[data-track]").forEach((el) => {
 /* =========================
    RARE-UI INSPIRED — spotlight cards + magnetic controls
    ========================= */
-document.querySelectorAll("[data-spotlight]").forEach((card) => {
-  card.addEventListener("pointermove", (e) => {
-    const r = card.getBoundingClientRect();
-    card.style.setProperty("--mx", `${e.clientX - r.left}px`);
-    card.style.setProperty("--my", `${e.clientY - r.top}px`);
+if (!IS_LOW_POWER) {
+  document.querySelectorAll("[data-spotlight]").forEach((card) => {
+    let pending = null;
+    card.addEventListener("pointermove", (e) => {
+      if (!pending) {
+        requestAnimationFrame(() => {
+          const r = card.getBoundingClientRect();
+          card.style.setProperty("--mx", `${pending.x - r.left}px`);
+          card.style.setProperty("--my", `${pending.y - r.top}px`);
+          pending = null;
+        });
+      }
+      pending = { x: e.clientX, y: e.clientY };
+    });
   });
-});
+}
 
 if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
   document.querySelectorAll(".magnetic").forEach((el) => {
@@ -553,11 +585,16 @@ document.getElementById("btn-reset")?.addEventListener("click", () => {
   updateLabMeta();
 });
 
+let scopeW = 0;
+let scopeH = 0;
+
 function resizeScope() {
-  const dpr = window.devicePixelRatio || 1;
+  const dpr = Math.min(window.devicePixelRatio || 1, IS_LOW_POWER ? 1.5 : 2);
   const rect = scopeCanvas.getBoundingClientRect();
-  scopeCanvas.width = rect.width * dpr;
-  scopeCanvas.height = rect.height * dpr;
+  scopeW = rect.width;
+  scopeH = rect.height;
+  scopeCanvas.width = scopeW * dpr;
+  scopeCanvas.height = scopeH * dpr;
   sctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 resizeScope();
@@ -590,22 +627,23 @@ function phaseSample(theta, i, elapsed) {
 
 function drawScope(elapsed) {
   const { freq, amp, speed } = getScopeParams();
-  const rect = scopeCanvas.getBoundingClientRect();
-  const w = rect.width;
-  const h = rect.height;
+  const w = scopeW;
+  const h = scopeH;
   sctx.clearRect(0, 0, w, h);
 
   sctx.strokeStyle = disturbances.fault ? "rgba(255,95,86,.07)" : "rgba(255,184,77,.06)";
   sctx.lineWidth = 1;
   const cols = 16, rows = 6;
+  sctx.beginPath();
   for (let i = 0; i <= cols; i++) {
     const x = (i / cols) * w;
-    sctx.beginPath(); sctx.moveTo(x, 0); sctx.lineTo(x, h); sctx.stroke();
+    sctx.moveTo(x, 0); sctx.lineTo(x, h);
   }
   for (let j = 0; j <= rows; j++) {
     const y = (j / rows) * h;
-    sctx.beginPath(); sctx.moveTo(0, y); sctx.lineTo(w, y); sctx.stroke();
+    sctx.moveTo(0, y); sctx.lineTo(w, y);
   }
+  sctx.stroke();
 
   sctx.strokeStyle = "rgba(232,230,225,.15)";
   sctx.beginPath(); sctx.moveTo(0, h / 2); sctx.lineTo(w, h / 2); sctx.stroke();
@@ -618,36 +656,56 @@ function drawScope(elapsed) {
   const cycles = 3;
   const speedMult = speed / 5;
 
+  const points = IS_LOW_POWER ? 160 : 220;
+  const freqScale = freq / 60;
+  sctx.lineJoin = "round";
   for (let i = 0; i < 3; i++) {
     if (!phaseVisible[i]) continue;
-    sctx.strokeStyle = COLORS_PHASE[i];
-    sctx.lineWidth = disturbances.fault && i === 0 ? 2.4 : 1.8;
-    sctx.shadowColor = COLORS_PHASE[i];
-    sctx.shadowBlur = disturbances.fault ? 12 : 8;
-    sctx.beginPath();
-    const points = 440;
+    const path = new Path2D();
     for (let p = 0; p <= points; p++) {
       const x = (p / points) * w;
-      const freqScale = freq / 60;
       const theta = (p / points) * cycles * freqScale * Math.PI * 2 - elapsed * 0.003 * speedMult;
       const y = h / 2 - phaseSample(theta, i, elapsed) * drawAmp;
-      if (p === 0) sctx.moveTo(x, y); else sctx.lineTo(x, y);
+      if (p === 0) path.moveTo(x, y); else path.lineTo(x, y);
     }
-    sctx.stroke();
-    sctx.shadowBlur = 0;
+    const base = disturbances.fault && i === 0 ? 2.4 : 1.8;
+    // brillo barato (reemplaza shadowBlur)
+    sctx.strokeStyle = COLORS_PHASE[i];
+    sctx.globalAlpha = disturbances.fault ? 0.22 : 0.15;
+    sctx.lineWidth = base * 4;
+    sctx.stroke(path);
+    sctx.globalAlpha = 1;
+    sctx.lineWidth = base;
+    sctx.stroke(path);
   }
 
   sctx.strokeStyle = disturbances.fault ? "rgba(255,95,86,.65)" : "rgba(255,184,77,.4)";
   sctx.beginPath(); sctx.moveTo(w - 1, 0); sctx.lineTo(w - 1, h); sctx.stroke();
 }
 
+let scopeVisible = false;
+let scopeRaf = 0;
+
 function scopeLoop(t) {
-  requestAnimationFrame(scopeLoop);
-  if (!scopePaused) scopeTimeOffset += t - lastRafTime;
+  if (!scopeVisible || document.hidden) { scopeRaf = 0; return; }
+  scopeRaf = requestAnimationFrame(scopeLoop);
+  if (!scopePaused) scopeTimeOffset += Math.min(t - lastRafTime, 50);
   lastRafTime = t;
   drawScope(scopeTimeOffset);
 }
-requestAnimationFrame((t) => { lastRafTime = t; requestAnimationFrame(scopeLoop); });
+
+function startScope() {
+  if (scopeRaf || !scopeVisible || document.hidden) return;
+  scopeRaf = requestAnimationFrame((t) => {
+    lastRafTime = t;
+    scopeRaf = requestAnimationFrame(scopeLoop);
+  });
+}
+watchVisibility(scopeCanvas, (v) => { scopeVisible = v; startScope(); });
+
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) { startHero(); startScope(); }
+});
 
 /* =========================
    GRID FAILURE EASTER EGG
