@@ -1430,3 +1430,89 @@ body.grid-blackout .topbar,body.grid-blackout .section,body.grid-blackout .hero,
   .noise { display: none; }
 }
 .skill { contain: layout paint; }
+
+/* ---------- tower / interludio 3D con scroll ---------- */
+.tower {
+  position: relative;
+  z-index: 2;
+  height: 260vh;
+  border-top: 1px solid var(--rule);
+}
+.tower-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+.tower-canvas {
+  position: absolute;
+  inset: 0;
+}
+.tower-canvas canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+.tower-hud {
+  position: relative;
+  z-index: 1;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: clamp(5rem, 14vh, 8rem) var(--pad) 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.tower-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.tower-sub {
+  font-family: var(--font-body);
+  color: var(--ink-dim);
+  max-width: 34ch;
+}
+.tower-meter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  margin-top: 0.4rem;
+}
+.tower-meter strong { color: var(--accent); font-weight: 500; }
+.tower-meter .sep { color: var(--ink-faint); }
+.tower-led {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ink-faint);
+  transition: background 0.4s, box-shadow 0.4s;
+}
+.tower.tower-live .tower-led {
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+@media (max-width: 820px) {
+  .tower { height: 200vh; }
+  .tower-sub { max-width: 26ch; font-size: 0.9rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tower { height: auto; }
+  .tower-sticky { position: relative; height: 80vh; }
+}
+@media (max-width: 700px) {
+  .tower-hud { padding-top: 5.5rem; }
+  .tower-hud::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 -3rem 0;
+    background: linear-gradient(var(--bg) 55%, transparent);
+    z-index: -1;
+  }
+}

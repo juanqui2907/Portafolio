@@ -336,6 +336,24 @@
       </div>
     </section>
 
+    <!-- TOWER / interludio 3D (scroll) -->
+    <section id="tower" class="tower" aria-label="Torre de transmisión 3D que se ensambla con el scroll">
+      <div class="tower-sticky">
+        <div id="tower-canvas" class="tower-canvas" aria-hidden="true"></div>
+        <div class="tower-hud mono">
+          <span class="section-num">INTERLUDIO / INFRAESTRUCTURA</span>
+          <h2 class="tower-title">De la celosía<br />a la red.</h2>
+          <p class="tower-sub">Sigue bajando: la torre se ensambla, se tiende la línea y se energiza.</p>
+          <div class="tower-meter">
+            <span class="dim">ENSAMBLE</span> <strong id="tower-pct">000</strong><span class="dim">%</span>
+            <span class="sep">•</span>
+            <span id="tower-stage">CIMENTACIÓN</span>
+            <span class="tower-led" aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- PROJECTS -->
     <section id="projects" class="section projects">
       <header class="section-head">
@@ -563,5 +581,6 @@
     </div>
 
     <script type="module" src="app.js"></script>
+    <script type="module" src="tower.js"></script>
   </body>
 </html>
